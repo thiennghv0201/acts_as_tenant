@@ -15,7 +15,7 @@ module ActsAsTenant
   @@mutable_tenant = false
 
   class Current < ActiveSupport::CurrentAttributes
-    attribute :current_tenant, :acts_as_tenant_unscoped
+    # attribute :current_tenant, :acts_as_tenant_unscoped
 
     def current_tenant=(tenant)
       super.tap do
@@ -71,27 +71,27 @@ module ActsAsTenant
   end
 
   def self.current_tenant=(tenant)
-    Current.current_tenant = tenant
+    Fiber[:current_tenant] = tenant
   end
 
   def self.current_tenant
-    Current.current_tenant || test_tenant || default_tenant
+    Fiber[:current_tenant] || test_tenant || default_tenant
   end
 
   def self.test_tenant=(tenant)
-    Thread.current[:test_tenant] = tenant
+    Fiber[:test_tenant] = tenant
   end
 
   def self.test_tenant
-    Thread.current[:test_tenant]
+    Fiber[:test_tenant]
   end
 
   def self.unscoped=(unscoped)
-    Current.acts_as_tenant_unscoped = unscoped
+    Fiber[:acts_as_tenant_unscoped] = unscoped
   end
 
   def self.unscoped
-    Current.acts_as_tenant_unscoped
+    Fiber[:acts_as_tenant_unscoped]
   end
 
   def self.unscoped?
