@@ -26,6 +26,14 @@ module ActsAsTenant
     def configuration
       Module.nesting.last.class_variable_get(:@@configuration)
     end
+
+    def current_attributes
+      storage[name] ||= {}
+    end
+
+    def storage
+      ActiveSupport::IsolatedExecutionState[:current_attributes] ||= {}
+    end
   end
 
   class << self
