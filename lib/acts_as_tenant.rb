@@ -71,27 +71,27 @@ module ActsAsTenant
   end
 
   def self.current_tenant=(tenant)
-    Fiber[:current_tenant] = tenant
+    Fiber.current.storage[:current_tenant] = tenant
   end
 
   def self.current_tenant
-    Fiber[:current_tenant] || test_tenant || default_tenant
+    Fiber.current.storage[:current_tenant] || test_tenant || default_tenant
   end
 
   def self.test_tenant=(tenant)
-    Fiber[:test_tenant] = tenant
+    Fiber.current.storage[:test_tenant] = tenant
   end
 
   def self.test_tenant
-    Fiber[:test_tenant]
+    Fiber.current.storage[:test_tenant]
   end
 
   def self.unscoped=(unscoped)
-    Fiber[:acts_as_tenant_unscoped] = unscoped
+    Fiber.current.storage[:acts_as_tenant_unscoped] = unscoped
   end
 
   def self.unscoped
-    Fiber[:acts_as_tenant_unscoped]
+    Fiber.current.storage[:acts_as_tenant_unscoped]
   end
 
   def self.unscoped?
