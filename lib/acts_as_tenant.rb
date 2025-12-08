@@ -79,11 +79,11 @@ module ActsAsTenant
   end
 
   def self.current_tenant=(tenant)
-    Current.current_tenant = tenant
+    Thread.current[:current_tenant] = tenant
   end
 
   def self.current_tenant
-    Current.current_tenant || test_tenant || default_tenant
+    Thread.current[:current_tenant] || test_tenant || default_tenant
   end
 
   def self.test_tenant=(tenant)
